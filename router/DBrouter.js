@@ -2,7 +2,7 @@ const express = require("express");
 const DBrouter = express.Router();
 const conn = require("../config/DBConfig.js");
 
-// ex06Join.html
+// 회원가입
 DBrouter.post("/JoinDB", (request, response) => {
     
     let id = request.body.id;
@@ -14,7 +14,7 @@ DBrouter.post("/JoinDB", (request, response) => {
     conn.query(sql, [id, pw, nick], (err, row) => {
         if(!err){
             console.log("입력성공 : " + row);
-            response.redirect("http://127.0.0.1:5500/mynodejs/public/ex06Main.html");
+            response.redirect("http://127.0.0.1:3001/Main");
         } else {
             console.log("입력실패 : " + err);
         }
@@ -22,7 +22,7 @@ DBrouter.post("/JoinDB", (request, response) => {
 });
 
 
-// ex06Delete.html
+// 삭제
 DBrouter.get("/Delete", (request, response) => {
     // 회원삭제라우터만들기
     // 1. get방식의 /Delete라우터 생성
@@ -38,7 +38,7 @@ DBrouter.get("/Delete", (request, response) => {
             console.log("삭제실패 : " + err);
         } else if(row.affectedRows > 0) {
             console.log("명령에 성공한 수 : " + row.affectedRows);
-            response.redirect("http://127.0.0.1:5500/mynodejs/public/ex06Main.html");
+            response.redirect("http://127.0.0.1:3001/Main");
         } else if(row.affectedRows == 0) {
             console.log("삭제된 값이 없습니다.")
         }
@@ -46,7 +46,7 @@ DBrouter.get("/Delete", (request, response) => {
 });
 
 
-// ex06Update.html
+// 회원 수정
 DBrouter.post("/Update", (request, response) => {
 
     let id = request.body.id;
@@ -67,7 +67,7 @@ DBrouter.post("/Update", (request, response) => {
             console.log("수정실패 : " + err);
         } else if(row.affectedRows > 0) {
             console.log("명령에 성공한 수 : " + row.affectedRows);
-            response.redirect("http://127.0.0.1:5500/mynodejs/public/ex06Main.html");
+            response.redirect("http://127.0.0.1:3001/Main");
         } else if(row.affectedRows == 0) {
             console.log("수정된 값이 없습니다.")
         }
@@ -96,7 +96,7 @@ DBrouter.get("/SelectAll", (request, response) => {
 });
 
 
-// ex06SelectOne.html
+// 회원 검색
 DBrouter.get("/SelectOne", (request, response) => {
     // 회원검색 라우터 만들기
     // 1. get방식의 /SelectOne라우터 생성
@@ -135,8 +135,12 @@ DBrouter.post("/Login", (request, response) => {
             console.log("검색 실패 : " + err);
         } else if(row.length > 0) {
             // 로그인 성공
+            request.session.user = id;
+            
+            console.log("session영역에 id저장 성공" + request.session.user);
+
             response.render("LoginS", {
-                row_id : row,
+                row_id : id,
             })
         } else if(row.length == 0) {
             // 로그인 실패
@@ -162,6 +166,26 @@ DBrouter.get("/SelectDelete", (request, response) => {
         } else if(row.affectedRows == 0) {
             console.log("삭제된 값이 없습니다.")
         }
+    })
+});
+
+
+// 홈
+DBrouter.get("/Main", (request, response) => {
+    
+    response.render("Main", {
+        id : request.session.user    // Main.ejs로 보냄
+    })
+});
+
+
+// 로그아웃
+DBrouter.get("/Logout", (request, response) => {
+    
+    delete request.session.user;
+
+    response.render("Main", {
+        id : request.session.user    // Main.ejs로 보냄
     })
 });
 

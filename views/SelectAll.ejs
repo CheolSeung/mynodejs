@@ -25,10 +25,7 @@
             <th>NICK</th>
         </tr>
 
-        {%for item in row_names%}
-
-        {%endfor%}
-
+        <!-- '='이 있으면 브라우저에 출력, 없으면 그냥 코드작성 -->
         <%for(let i=0; i<row_names.length; i++){%>
         <tr>
             <td><%=row_names[i].id%></td>

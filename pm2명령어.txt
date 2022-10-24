@@ -9,3 +9,9 @@ pm2 list
  
 pm2 monit
  -> 실행되고있는 서버파일 모니터링
+
+npm install express-session --save
+ -> 세션기능
+
+npm install express-mysql-session --save
+ -> 세션이 저장되는 영역(mysql)
