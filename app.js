@@ -9,6 +9,7 @@ const bodyparser = require("body-parser");
 const session = require("express-session");  // 세션기능
 const mysql_session = require("express-mysql-session");  // 세션이 저장되는 영역(mysql)
 const Messagerouter = require("./router/Messagerouter.js");
+const ex01router = require("./Quiz/ex01.js");
 
 let ejs = require("ejs");
 
@@ -41,4 +42,5 @@ app.use(DBrouter);
 app.use(EJSrouter);
 app.use(Sessionrouter);
 app.use(Messagerouter);
+app.use(ex01router);
 app.listen(3001);  // 현재 서버파일의 port번호설정
